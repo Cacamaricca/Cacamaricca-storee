@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cacamaricca Store</title>
+  <meta name="description" content="Cacamaricca Store — accessories & clothes untuk sekolah.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="opening" class="opening">
+    <div class="opening-glow"></div>
+    <div class="opening-content">
+      <div class="logo-mark">C</div>
+      <p class="eyebrow">WELCOME TO</p>
+      <h1>cacamaricca</h1>
+      <p class="opening-sub">cute things, made to match your day.</p>
+      <div class="loading-line"><span></span></div>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <a href="#" class="brand">
+      <div class="brand-logo">C</div>
+      <div><strong>cacamaricca</strong><small>STORE</small></div>
+    </a>
+    <nav>
+      <a href="#shop">shop</a>
+      <a href="#categories">categories</a>
+    </nav>
+    <button class="cart-button" id="cartBtn" aria-label="Keranjang">
+      🛒 <span id="cartCount">0</span>
+    </button>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy reveal">
+        <span class="pill">school essentials • cute edition</span>
+        <h2>Welcome to<br><em>Cacamaricca Store</em></h2>
+        <p>Temukan barang kecil yang bikin outfit sekolah kamu makin serasi.</p>
+        <a class="primary-btn" href="#categories">explore collection ↓</a>
+      </div>
+      <div class="hero-card reveal">
+        <div class="spark s1">✦</div><div class="spark s2">✧</div>
+        <div class="hero-circle">C</div>
+        <div class="hero-note">made for<br>your everyday</div>
+      </div>
+    </section>
+
+    <section id="categories" class="categories section">
+      <div class="section-head">
+        <div><span class="eyebrow dark">SHOP BY CATEGORY</span><h3>pick your vibe</h3></div>
+      </div>
+      <div class="category-grid">
+        <a class="category-card cat-1" href="#shop" data-category="jedai"><span>✦</span><strong>JEDAI</strong><small>little clips, big mood</small></a>
+        <a class="category-card cat-2" href="#shop" data-category="karet"><span>◌</span><strong>KARET</strong><small>tie it cute</small></a>
+        <a class="category-card cat-3" href="#shop" data-category="jepit"><span>♡</span><strong>JEPIT</strong><small>clip your style</small></a>
+        <a class="category-card cat-4" href="#shop" data-category="bando"><span>⌁</span><strong>BANDO</strong><small>head-to-toe cute</small></a>
+        <a class="category-card cat-5" href="#shop" data-category="clothes"><span>✿</span><strong>CLOTHES</strong><small>match your fit</small></a>
+      </div>
+    </section>
+
+    <section id="shop" class="shop section">
+      <div class="shop-top">
+        <div><span class="eyebrow dark">THE COLLECTION</span><h3 id="shopTitle">all products</h3></div>
+        <div class="filter-wrap">
+          <button class="filter active" data-filter="all">all</button>
+          <button class="filter" data-filter="jedai">jedai</button>
+          <button class="filter" data-filter="karet">karet</button>
+          <button class="filter" data-filter="jepit">jepit</button>
+          <button class="filter" data-filter="bando">bando</button>
+          <button class="filter" data-filter="clothes">clothes</button>
+        </div>
+      </div>
+      <div id="productGrid" class="product-grid">
+        <div class="loading">Loading products...</div>
+      </div>
+    </section>
+  </main>
+
+  <div id="productModal" class="modal hidden">
+    <div class="modal-backdrop" data-close="productModal"></div>
+    <div class="modal-box product-detail">
+      <button class="close" data-close="productModal">×</button>
+      <div id="productDetailContent"></div>
+    </div>
+  </div>
+
+  <aside id="cartDrawer" class="drawer">
+    <div class="drawer-head"><div><span class="eyebrow dark">YOUR BAG</span><h3>keranjang</h3></div><button class="close" id="closeCart">×</button></div>
+    <div id="cartItems" class="cart-items"></div>
+    <div class="cart-summary">
+      <div><span>subtotal</span><strong id="cartTotal">Rp0</strong></div>
+      <button class="primary-btn full" id="checkoutBtn">checkout →</button>
+    </div>
+  </aside>
+  <div id="drawerBackdrop" class="drawer-backdrop hidden"></div>
+
+  <div id="checkoutModal" class="modal hidden">
+    <div class="modal-backdrop" data-close="checkoutModal"></div>
+    <div class="modal-box checkout">
+      <button class="close" data-close="checkoutModal">×</button>
+      <span class="eyebrow dark">CHECKOUT</span>
+      <h3>order details</h3>
+      <form id="checkoutForm">
+        <label>Nama pembeli<input required id="buyerName" placeholder="contoh: Caca"></label>
+        <label>Kelas<input required id="buyerClass" placeholder="contoh: 9A"></label>
+        <label>Pembayaran
+          <select id="paymentMethod" required>
+            <option value="transfer">Transfer</option>
+            <option value="cash">Cash</option>
+          </select>
+        </label>
+        <div class="order-preview" id="checkoutPreview"></div>
+        <div class="total-row"><span>Total</span><strong id="checkoutTotal">Rp0</strong></div>
+        <button class="primary-btn full" type="submit">place order</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="successModal" class="modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-box success">
+      <div class="success-icon">✓</div>
+      <span class="eyebrow dark">ORDER RECEIVED</span>
+      <h3>thank you! 💌</h3>
+      <p id="successText">Pesanan kamu berhasil dibuat.</p>
+      <button class="primary-btn full" data-close="successModal">done</button>
+    </div>
+  </div>
+
+  <footer><div class="brand mini"><div class="brand-logo">C</div><div><strong>cacamaricca</strong><small>STORE</small></div></div><p>made with ♡ for school days</p></footer>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

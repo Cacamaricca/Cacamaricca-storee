@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Cacamaricca Admin</title><link rel="stylesheet" href="style.css"><style>body{padding:40px 7vw}.admin{max-width:1100px;margin:auto}.admin-card{background:#fff;border:1px solid #eadde4;border-radius:24px;padding:24px;margin:20px 0}.admin-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}.admin input,.admin select{width:100%;padding:12px;border:1px solid #ded1d8;border-radius:12px;margin:6px 0 15px}.table{width:100%;border-collapse:collapse;font-size:12px}.table th,.table td{padding:10px;border-bottom:1px solid #eadde4;text-align:left}.danger{border:1px solid #e5c8d1;background:#fff0f4;border-radius:99px;padding:7px 11px}.top{display:flex;justify-content:space-between;align-items:center}@media(max-width:700px){.admin-grid{grid-template-columns:1fr}}</style></head>
+<body>
+<div class="admin">
+  <div class="top"><div class="brand"><div class="brand-logo">C</div><div><strong>cacamaricca</strong><small>ADMIN</small></div></div><button id="logout" class="small-btn hidden">logout</button></div>
+  <section id="loginCard" class="admin-card">
+    <span class="eyebrow dark">ADMIN LOGIN</span><h2>store control</h2>
+    <form id="loginForm"><label>Email<input id="email" type="email" required></label><label>Password<input id="password" type="password" required></label><button class="primary-btn" type="submit">login</button></form>
+  </section>
+  <div id="panel" class="hidden">
+    <section class="admin-card"><span class="eyebrow dark">PRODUCT</span><h2>tambah produk</h2>
+      <form id="productForm"><div class="admin-grid">
+        <label>Nama<input id="pname" required placeholder="Contoh: Ribbon Bow"></label>
+        <label>Kategori<select id="pcat"><option>jedai</option><option>karet</option><option>jepit</option><option>bando</option><option>clothes</option></select></label>
+        <label>Harga<input id="price" type="number" min="0" required></label>
+        <label>Foto URL<input id="image" placeholder="https://..."></label>
+      </div><label>Deskripsi<input id="desc" placeholder="Deskripsi singkat"></label>
+      <button class="primary-btn" type="submit">+ add product</button></form>
+    </section>
+    <section class="admin-card"><span class="eyebrow dark">VARIANT</span><h2>tambah warna & stock</h2>
+      <form id="variantForm"><div class="admin-grid">
+        <label>Produk<select id="productSelect" required></select></label>
+        <label>Nama warna<input id="color" required placeholder="Pink"></label>
+        <label>Stock<input id="stock" type="number" min="0" required></label>
+        <label>Foto variant (opsional)<input id="vimage" placeholder="https://..."></label>
+      </div><button class="primary-btn" type="submit">+ add variant</button></form>
+    </section>
+    <section class="admin-card"><span class="eyebrow dark">PRODUCT LIST</span><div id="productList"></div></section>
+  </div>
+</div>
+<script type="module">
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+import { SUPABASE_URL, SUPABASE_ANON_KEY } from "./config.js";
+const supabase=createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+const rupiah=n=>new Intl.NumberFormat("id-ID",{style:"currency",currency:"IDR",maximumFractionDigits:0}).format(n);
+const $=id=>document.getElementById(id);
+
+$("loginForm").onsubmit=async e=>{
+ e.preventDefault();
+ const {error}=await supabase.auth.signInWithPassword({email:$("email").value,password:$("password").value});
+ if(error) alert(error.message); else showPanel();
+};
+$("logout").onclick=()=>supabase.auth.signOut();
+async function showPanel(){ $("loginCard").classList.add("hidden");$("panel").classList.remove("hidden");$("logout").classList.remove("hidden");await loadProducts();}
+supabase.auth.onAuthStateChange((_e,session)=>session?showPanel():location.reload());
+
+async function loadProducts(){
+ const {data,error}=await supabase.from("products").select("*,product_variants(*)").order("created_at",{ascending:false});
+ if(error){alert(error.message);return}
+ const sel=$("productSelect");sel.innerHTML=data.map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join("");
+ $("productList").innerHTML=data.map(p=>`<div style="padding:14px 0;border-bottom:1px solid #eadde4"><b>${esc(p.name)}</b> — ${rupiah(p.price)} — ${esc(p.category)}<div>${(p.product_variants||[]).map(v=>`<span style="display:inline-block;background:#f5eaf0;border-radius:99px;padding:5px 9px;margin:5px;font-size:10px">${esc(v.color_name)}: ${v.stock}</span>`).join("")}</div></div>`).join("");
+}
+$("productForm").onsubmit=async e=>{
+ e.preventDefault();
+ const {data,error}=await supabase.from("products").insert({name:$("pname").value,category:$("pcat").value,price:Number($("price").value),image_url:$("image").value||null,description:$("desc").value,active:true}).select().single();
+ if(error)alert(error.message);else{alert("Produk ditambahkan.");e.target.reset();await loadProducts();}
+};
+$("variantForm").onsubmit=async e=>{
+ e.preventDefault();
+ const {error}=await supabase.from("product_variants").insert({product_id:$("productSelect").value,color_name:$("color").value,stock:Number($("stock").value),image_url:$("vimage").value||null});
+ if(error)alert(error.message);else{alert("Warna + stock ditambahkan.");e.target.reset();await loadProducts();}
+};
+function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
+</script>
+</body></html>
