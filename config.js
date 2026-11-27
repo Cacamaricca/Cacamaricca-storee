@@ -1,2 +1,2 @@
 export const SUPABASE_URL = "https://pgaknftqweyyvicpmpot.supabase.co";
-export const SUPABASE_ANON_KEY = "sb_publishable_wmmPPf24TWFusvyKsekaSA_MTo3y-F9";
+export const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBnYWtuZnRxd2V5eXZpY3BtcG90Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTU3NjQ3ODUsImV4cCI6MjExMTM0MDc4NX0.vyrf-_6yjm4tf5aPxMST74KCTG7CY4V1h1Y4DCWLGU0";
